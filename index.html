@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بهنام | مهندسی برق، کد و ابزارهای رایگان</title>
+<meta name="description" content="وب‌سایت شخصی بهنام: دکترای مهندسی برق قدرت، برنامه‌نویسی و پروژه‌های رایگان">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="wrap">
+  <a class="brand" href="./"><i></i>بهنام</a>
+  <nav><a href="projects.html">پروژه‌های رایگان</a><a href="https://github.com/behnamjooj">گیت‌هاب</a></nav>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>برق، کد، و چیزهایی که واقعاً کار می‌کنند</h1>
+    <p>دکترای مهندسی برق قدرت. روی شبکه‌های اینترنت اشیای مبتنی بر پهپاد، بهینه‌سازی انرژی و تازگی اطلاعات (AoI) کار کرده‌ام و ابزار و بازی وب می‌سازم.</p>
+    <div class="btns">
+      <a class="btn main" href="projects.html">پروژه‌های رایگان</a>
+      <a class="btn" href="https://github.com/behnamjooj">گیت‌هاب من</a>
+    </div>
+    <figure>
+      <canvas id="scope" role="img" aria-label="نمودار زنده سه‌فاز: سه موج سینوسی با اختلاف فاز ۱۲۰ درجه"></canvas>
+      <figcaption>سیستم سه‌فاز، زنده. موس یا انگشتت را روی نمودار حرکت بده تا فرکانس و دامنه عوض شود. خط خاکستری، مجموع سه فاز است و همیشه صفر می‌ماند.</figcaption>
+    </figure>
+  </section>
+
+  <section class="block">
+    <h2>روی چه کار می‌کنم</h2>
+    <dl class="rows">
+      <div style="--p:var(--a)"><dt>پژوهش</dt><dd>شبکه‌های IoT با پهپاد، بهینه‌سازی مصرف انرژی و کمینه‌کردن Age of Information.</dd></div>
+      <div style="--p:var(--b)"><dt>ابزار و بازی وب</dt><dd>برنامه‌های تک‌فایل که آفلاین هم اجرا می‌شوند: شطرنج، ماشین‌حساب انتگرال، مبدل تاریخ و بازی‌ها.</dd></div>
+      <div style="--p:var(--c)"><dt>آموزش</dt><dd>محتوای تعاملی برای یادگیری ریاضی، زبان و شطرنج.</dd></div>
+    </dl>
+  </section>
+
+  <section class="cta">
+    <div><h2>همه پروژه‌های رایگان یک‌جا</h2><span style="color:var(--mute)">باز کن، استفاده کن، لازم نیست ثبت‌نام کنی.</span></div>
+    <a class="btn main" href="projects.html">دیدن پروژه‌ها</a>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>بهنام</span><a href="https://github.com/behnamjooj">github.com/behnamjooj</a></div></footer>
+
+<script>
+(()=>{
+const c=document.getElementById('scope'),x=c.getContext('2d');
+const still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const col=()=>{const s=getComputedStyle(document.documentElement);return[s.getPropertyValue('--a'),s.getPropertyValue('--b'),s.getPropertyValue('--c'),s.getPropertyValue('--line'),s.getPropertyValue('--mute')]};
+let w,h,t=0,f=1.6,a=.7,tf=1.6,ta=.7,raf;
+function size(){const d=Math.min(devicePixelRatio||1,2);w=c.clientWidth;h=c.clientHeight;c.width=w*d;c.height=h*d;x.setTransform(d,0,0,d,0,0)}
+function draw(){
+  const [A,B,C,L,M]=col(),P=[A,B,C],T=2*Math.PI/3;
+  x.clearRect(0,0,w,h);
+  x.strokeStyle=L;x.lineWidth=1;x.beginPath();
+  for(let i=1;i<10;i++){const gx=w/10*i;x.moveTo(gx,0);x.lineTo(gx,h)}
+  for(let i=1;i<6;i++){const gy=h/6*i;x.moveTo(0,gy);x.lineTo(w,gy)}
+  x.stroke();
+  const amp=h*.38*a;
+  for(let k=0;k<3;k++){
+    x.strokeStyle=P[k].trim();x.lineWidth=2.6;x.beginPath();
+    for(let px=0;px<=w;px+=3){const y=h/2-Math.sin(px/w*Math.PI*2*f*1.5-t-k*T)*amp;px?x.lineTo(px,y):x.moveTo(px,y)}
+    x.stroke();
+  }
+  x.strokeStyle=M.trim();x.lineWidth=1.5;x.setLineDash([6,5]);x.beginPath();x.moveTo(0,h/2);x.lineTo(w,h/2);x.stroke();x.setLineDash([]);
+  // phasor
+  const r=Math.min(46,h*.16),cx=w-r-26,cy=r+26;
+  x.strokeStyle=L;x.lineWidth=1.5;x.beginPath();x.arc(cx,cy,r,0,7);x.stroke();
+  for(let k=0;k<3;k++){const ang=-(t+k*T)*-1-k*2*T;const an=t-k*T;
+    x.strokeStyle=P[k].trim();x.lineWidth=2.4;x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(an)*r*a/.7*.95,cy-Math.sin(an)*r*a/.7*.95);x.stroke();}
+}
+function loop(){f+=(tf-f)*.06;a+=(ta-a)*.06;t+=.035*f;draw();raf=requestAnimationFrame(loop)}
+function move(e){const r=c.getBoundingClientRect(),p=e.touches?e.touches[0]:e;
+  const nx=Math.min(1,Math.max(0,(p.clientX-r.left)/r.width)),ny=Math.min(1,Math.max(0,(p.clientY-r.top)/r.height));
+  tf=.8+nx*2.6;ta=.3+(1-ny)*.75;if(still)draw()}
+c.addEventListener('pointermove',move);c.addEventListener('touchmove',move,{passive:true});
+addEventListener('resize',()=>{size();draw()});
+size();still?draw():loop();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پروژه‌های رایگان | بهنام</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="wrap">
+  <a class="brand" href="./"><i></i>بهنام</a>
+  <nav><a href="projects.html" aria-current="page">پروژه‌های رایگان</a><a href="https://github.com/behnamjooj">گیت‌هاب</a></nav>
+</div></header>
+
+<main class="wrap" style="padding-top:3rem;min-height:60vh">
+  <h1 style="font-size:clamp(2rem,5vw,3.2rem)">پروژه‌های رایگان</h1>
+  <p style="color:var(--mute);margin-top:.8rem">همه این ابزارها و بازی‌ها رایگان‌اند و داخل مرورگر اجرا می‌شوند.</p>
+  <div class="filters" id="filters" role="group" aria-label="فیلتر نوع پروژه"></div>
+  <div id="list" aria-live="polite"></div>
+</main>
+
+<footer><div class="wrap"><span>بهنام</span><a href="https://github.com/behnamjooj">github.com/behnamjooj</a></div></footer>
+
+<script>
+const COLORS={"بازی":"var(--a)","ابزار":"var(--b)","آموزشی":"var(--c)"};
+const list=document.getElementById('list'),fl=document.getElementById('filters');
+let all=[],cur='همه';
+function el(tag,txt,cls){const e=document.createElement(tag);if(txt)e.textContent=txt;if(cls)e.className=cls;return e}
+function render(){
+  list.replaceChildren();
+  const items=all.filter(p=>cur==='همه'||p.type===cur);
+  if(!items.length){list.append(el('p','هنوز پروژه‌ای در این دسته نیست.','empty'));return}
+  items.forEach(p=>{
+    const d=el('article',null,'item');d.style.setProperty('--p',COLORS[p.type]||'var(--mute)');
+    d.append(el('h3',p.title),el('p',p.desc),el('small',p.type+' - '+p.year));
+    const a=el('a','باز کردن','btn');a.href=p.url;d.append(a);list.append(d);
+  });
+}
+function chips(){
+  fl.replaceChildren();
+  ['همه',...new Set(all.map(p=>p.type))].forEach(t=>{
+    const b=el('button',t);b.setAttribute('aria-pressed',t===cur);
+    b.onclick=()=>{cur=t;chips();render()};fl.append(b);
+  });
+}
+fetch('projects.json').then(r=>r.json()).then(j=>{all=j;chips();render()})
+ .catch(()=>list.append(el('p','لیست پروژه‌ها بارگذاری نشد. صفحه را از طریق سرور (مثل GitHub Pages) باز کن، نه مستقیم از فایل.','empty')));
+</script>
+</body>
+</html>
