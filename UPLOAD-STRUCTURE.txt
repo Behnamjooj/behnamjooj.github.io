@@ -1,0 +1,10 @@
+Upload the CONTENTS of this folder to the ROOT of:
+https://github.com/behnamjooj/behnamjooj.github.io
+
+index.html
+projects.html
+assets/css/style.css
+assets/js/main.js
+assets/favicon.svg
+projects/chess-online/index.html
+README-FA.md
